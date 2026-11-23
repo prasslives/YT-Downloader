@@ -1,7 +1,8 @@
+.venv/
+venv/
 __pycache__/
 *.pyc
-venv/
+*.egg-info/
 build/
 dist/
 .DS_Store
-*.egg-info/

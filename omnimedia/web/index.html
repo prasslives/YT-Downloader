@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OmniMedia</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+        <span class="brand-name">OmniMedia</span>
+      </div>
+      <nav class="tabs" role="tablist">
+        <button class="tab active" role="tab" data-tab="download" aria-selected="true">Download</button>
+        <button class="tab" role="tab" data-tab="convert" aria-selected="false">Convert file</button>
+      </nav>
+      <div class="health" id="health" title="Tool status"></div>
+    </header>
+
+    <main>
+      <!-- ============================== DOWNLOAD ============================== -->
+      <section class="panel active" id="panel-download" role="tabpanel">
+        <label class="field">
+          <span class="label">Video link</span>
+          <div class="url-row">
+            <input id="url" type="url" placeholder="Paste a YouTube link…" autocomplete="off" spellcheck="false">
+            <button class="btn ghost" id="paste-btn" type="button">Paste</button>
+          </div>
+        </label>
+
+        <div class="preview" id="preview" hidden>
+          <img id="preview-thumb" alt="">
+          <div class="preview-meta">
+            <div class="preview-title" id="preview-title"></div>
+            <div class="preview-sub" id="preview-sub"></div>
+          </div>
+        </div>
+        <div class="inline-msg" id="preview-msg" hidden></div>
+
+        <div class="grid-2">
+          <label class="field">
+            <span class="label">Format</span>
+            <select id="dl-format">
+              <optgroup label="Video">
+                <option value="mp4" selected>MP4 (plays everywhere)</option>
+                <option value="mov">MOV (QuickTime / Final Cut)</option>
+                <option value="mkv">MKV (highest quality, up to 4K/8K)</option>
+              </optgroup>
+              <optgroup label="Audio only">
+                <option value="mp3">MP3</option>
+                <option value="m4a">M4A (AAC)</option>
+                <option value="wav">WAV (lossless PCM)</option>
+              </optgroup>
+            </select>
+          </label>
+          <label class="field" id="quality-field">
+            <span class="label">Max quality</span>
+            <select id="dl-quality">
+              <option value="best">Best available</option>
+              <option value="2160">2160p (4K)</option>
+              <option value="1440">1440p</option>
+              <option value="1080" selected>1080p</option>
+              <option value="720">720p</option>
+              <option value="480">480p</option>
+              <option value="360">360p</option>
+            </select>
+          </label>
+        </div>
+        <p class="hint" id="format-hint"></p>
+
+        <fieldset class="trim">
+          <legend>Trim <span class="muted">(optional)</span></legend>
+          <div class="grid-2">
+            <label class="field">
+              <span class="label">Start</span>
+              <input id="dl-start" class="time" placeholder="0:00" autocomplete="off">
+            </label>
+            <label class="field">
+              <span class="label">End</span>
+              <input id="dl-end" class="time" placeholder="end" autocomplete="off">
+            </label>
+          </div>
+          <p class="hint">Use <code>1:30</code>, <code>1:02:03</code> or seconds. Only the selected part is downloaded.</p>
+        </fieldset>
+
+        <button class="btn primary big" id="dl-btn" type="button">Download</button>
+      </section>
+
+      <!-- ============================== CONVERT ============================== -->
+      <section class="panel" id="panel-convert" role="tabpanel">
+        <div class="drop" id="drop-zone" tabindex="0" role="button" aria-label="Choose a media file">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+          <div><strong>Drop a video or audio file</strong> or <span class="link">browse</span></div>
+        </div>
+        <div class="file-chip" id="file-chip" hidden>
+          <div class="file-meta">
+            <div class="file-name" id="file-name"></div>
+            <div class="file-path" id="file-path"></div>
+          </div>
+          <button class="icon-btn" id="file-clear" type="button" title="Remove" aria-label="Remove file">✕</button>
+        </div>
+
+        <label class="field">
+          <span class="label">Convert to</span>
+          <select id="cv-format">
+            <optgroup label="Video">
+              <option value="mp4" selected>MP4 (H.264 / AAC)</option>
+              <option value="mov">MOV (H.264 / AAC)</option>
+              <option value="mkv">MKV (H.264 / AAC)</option>
+              <option value="avi">AVI (MPEG-4)</option>
+            </optgroup>
+            <optgroup label="Audio only">
+              <option value="mp3">MP3</option>
+              <option value="m4a">M4A (AAC)</option>
+              <option value="wav">WAV</option>
+              <option value="flac">FLAC</option>
+            </optgroup>
+          </select>
+        </label>
+
+        <fieldset class="trim">
+          <legend>Trim <span class="muted">(optional)</span></legend>
+          <div class="grid-2">
+            <label class="field">
+              <span class="label">Start</span>
+              <input id="cv-start" class="time" placeholder="0:00" autocomplete="off">
+            </label>
+            <label class="field">
+              <span class="label">End</span>
+              <input id="cv-end" class="time" placeholder="end" autocomplete="off">
+            </label>
+          </div>
+        </fieldset>
+
+        <label class="toggle" id="fast-toggle">
+          <input type="checkbox" id="cv-fast" checked>
+          <span class="switch" aria-hidden="true"></span>
+          <span>
+            <strong>Fast mode</strong>
+            <span class="muted">— copies streams without re-encoding. Trims snap to the nearest keyframe. Falls back to re-encoding automatically if needed.</span>
+          </span>
+        </label>
+
+        <button class="btn primary big" id="cv-btn" type="button">Convert</button>
+      </section>
+
+      <!-- ============================== SHARED ============================== -->
+      <div class="savebar">
+        <span class="muted">Save to</span>
+        <button class="path-btn" id="out-dir" type="button" title="Open folder"></button>
+        <button class="btn ghost small" id="out-change" type="button">Change…</button>
+      </div>
+
+      <section class="status" id="status" data-state="idle" aria-live="polite">
+        <div class="status-top">
+          <div class="status-text" id="status-text">Ready</div>
+          <div class="status-actions">
+            <button class="btn ghost small" id="reveal-btn" type="button" hidden>Show in Finder</button>
+            <button class="btn danger small" id="cancel-btn" type="button" hidden>Cancel</button>
+          </div>
+        </div>
+        <div class="bar"><div class="bar-fill" id="bar-fill"></div></div>
+        <div class="status-detail" id="status-detail"></div>
+      </section>
+
+      <details class="log" id="log-panel">
+        <summary>
+          <span>Activity log</span>
+          <span class="log-actions">
+            <button class="btn ghost small" id="log-copy" type="button">Copy</button>
+            <button class="btn ghost small" id="log-clear" type="button">Clear</button>
+          </span>
+        </summary>
+        <div class="log-body" id="log-body"></div>
+      </details>
+    </main>
+  </div>
+</body>
+</html>

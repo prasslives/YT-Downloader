@@ -1,9 +1,5 @@
 #!/bin/bash
-# OmniMedia launcher executable.
-# Resolves the project root (the folder that contains this .app bundle)
-# and runs launch.sh, opening a terminal window so the user can see status.
-APP_PATH="$(cd "$(dirname "$0")/../../.." && pwd)"
-cd "$APP_PATH" || exit 1
-
-# Run the launcher script. Keep a terminal open so install/progress logs are visible.
-exec "/bin/bash" "$APP_PATH/launch.sh"
+# Double-click launcher: runs ../../../run.sh (the project folder containing this .app).
+PROJECT="$(cd "$(dirname "$0")/../../.." && pwd)"
+LOG="$HOME/Library/Logs/OmniMedia.log"
+exec /bin/bash "$PROJECT/run.sh" >"$LOG" 2>&1
